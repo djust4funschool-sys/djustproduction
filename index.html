@@ -64,6 +64,16 @@
             letter-spacing: 0.05em;
             font-weight: bold;
         }
+
+        /* ПРАВКИ ДЛЯ МОБИЛЬНОЙ ВЕРСИИ (Шрифт заголовка) */
+        @media (max-width: 767px) {
+            /* Применяем и к hero-title, и к section-title, чтобы ВЕЗДЕ шрифт был тонким и высоким */
+            .hero-title, .section-title {
+                font-weight: normal !important; /* Убираем "дешевую" жирность */
+                letter-spacing: 0 !important;   /* Убираем лишнее расстояние */
+            }
+        }
+
         .main-text { font-family: 'TT Firs Neue', 'Montserrat', sans-serif !important; }
 
         /* --- BUTTONS --- */
@@ -568,10 +578,11 @@
         </main>
 
         <!-- TARIFFS PLACEHOLDER -->
-     <!-- Секция ФОРМАТЫ УЧАСТИЯ — заменить текущую в твоём коде (file:45) -->
-<section class="mt-24 fade-in-up">
-    <h2 class="section-title text-center text-4xl mb-12 text-glow">ФОРМАТЫ УЧАСТИЯ</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <!-- Added mt-32 to fix spacing issue -->
+        <section id="tariffs" class="max-w-6xl mx-auto mb-20 mt-32 fade-in-up">
+            <div class="text-center">
+                 <!-- Заголовок изменен под стиль "Программы" (размер, свечение, цвет) -->
+                 <h2 class="section-title text-4xl sm:text-5xl md:text-6xl text-glow text-lime-300 mb-4">ФОРМАТЫ УЧАСТИЯ</h2>
         
         <!-- BAZA -->
         <div class="glass-card p-8 flex flex-col hover:border-lime-300/50 transition duration-500">
@@ -619,6 +630,8 @@
     </div>
 </section>
    
+            </div>
+        </section>
             </div>
         </section>
 
