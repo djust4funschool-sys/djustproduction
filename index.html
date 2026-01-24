@@ -1,1334 +1,664 @@
 <!DOCTYPE html>
-
 <html lang="ru">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>DJust PRODUCTION: Алгоритм Хита</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
-
    
-
     <!-- GSAP Animation Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
    
-
     <!-- Google Fonts -->
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Staatliches&display=swap" rel="stylesheet">
 
-
-
     <style>
-
         /* --- FONTS & VARS --- */
-
         @font-face {
-
             font-family: 'Buyan';
-
             src: url('https://raw.githubusercontent.com/djust4funschool-sys/autumn_camp/main/fonts/Buyan.woff') format('woff');
-
             font-weight: normal;
-
             font-style: normal;
-
             font-display: swap;
-
         }
-
-
 
         @font-face {
-
             font-family: 'TT Firs Neue';
-
              src: url('https://raw.githubusercontent.com/djust4funschool-sys/autumn_camp/main/fonts/TT-Firs-Neue-Regular.woff') format('woff');
-
             font-weight: normal;
-
             font-style: normal;
-
             font-display: swap;
-
         }
-
-
 
         :root {
-
             --bg-dark: #0A0A0A;
-
             --bg-secondary: #111111;
-
             --text-light: #F5F5F5;
-
             --accent-lime: #DCFF1B;
-
             --accent-lime-darker: #DEFC3A;
-
             --surface-glass: rgba(255, 255, 255, 0.03);
-
             --border-glass: rgba(255, 255, 255, 0.08);
-
         }
-
        
-
         ::selection { background-color: var(--accent-lime); color: #000; }
-
         ::-moz-selection { background-color: var(--accent-lime); color: #000; }
 
-
-
         body {
-
             background:
-
                 linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.9)),
-
                 url('https://raw.githubusercontent.com/djust4funschool-sys/agata/main/%D1%84%D0%BE%D0%BD.jpg') center/cover no-repeat;
-
             background-attachment: fixed;
-
             color: var(--text-light);
-
             font-family: 'TT Firs Neue', 'Montserrat', sans-serif;
-
             scroll-behavior: smooth;
-
             overflow-x: hidden;
-
         }
-
-
 
         /* --- TYPOGRAPHY --- */
-
         .section-title, .hero-title {
-
             font-family: 'Buyan', 'Staatliches', sans-serif !important;
-
             text-transform: uppercase;
-
             letter-spacing: 0.05em;
-
             font-weight: bold;
-
         }
-
         .main-text { font-family: 'TT Firs Neue', 'Montserrat', sans-serif !important; }
 
-
-
         /* --- BUTTONS --- */
-
         .btn { transition: all 0.3s ease; }
-
         .btn-primary {
-
             background: linear-gradient(135deg, var(--accent-lime) 0%, var(--accent-lime-darker) 100%);
-
             color: var(--bg-dark);
-
             box-shadow: 0 4px 16px rgba(220, 255, 27, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-
             border-radius: 12px;
-
             font-weight: 600;
-
             letter-spacing: 0.5px;
-
             transform-style: preserve-3d;
-
         }
-
         .btn-primary:hover {
-
             transform: translateY(-2px) scale(1.02);
-
             box-shadow: 0 8px 25px rgba(220, 255, 27, 0.4), 0 0 20px rgba(220, 255, 27, 0.2);
-
         }
-
         .btn-secondary {
-
             background-color: transparent;
-
             color: var(--text-light);
-
             border: 1px solid var(--border-glass);
-
         }
-
         .btn-secondary:hover {
-
             background-color: var(--surface-glass);
-
             border-color: rgba(220, 255, 27, 0.15);
-
         }
-
-
 
         /* --- CARDS & UI --- */
-
         .glass-card {
-
             background-color: #222325;
-
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 256 256'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' result='noise' seed='2'/%3E%3CfeColorMatrix in='noise' type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-
             border: 1px solid rgba(255, 255, 255, 0.08);
-
             border-radius: 16px;
-
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
             overflow: hidden;
-
         }
-
         .glass-card:hover {
-
             background-color: #2a2b2d;
-
             border-color: rgba(220, 255, 27, 0.15);
-
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-
         }
-
-
 
         .text-glow {
-
             text-shadow: 0 0 20px rgba(220, 255, 27, 0.5), 0 0 40px rgba(220, 255, 27, 0.3);
-
         }
-
-
 
         .fade-in-up { opacity: 0; transform: translateY(60px); }
-
        
-
         .hero-title span { display: inline-block; }
 
-
-
         /* Sound Wave Animation */
-
         .sound-wave {
-
             width: 100%; height: 2px;
-
             background: linear-gradient(90deg, transparent, var(--accent-lime), transparent);
-
             animation: wave-pulse 2.5s ease-in-out infinite;
-
             margin: 3rem 0;
-
         }
-
         @keyframes wave-pulse {
-
             0%, 100% { transform: scaleX(0.5) scaleY(1); opacity: 0.5; }
-
             50% { transform: scaleX(1.5) scaleY(3); opacity: 1; }
-
         }
-
-
 
         /* Accordion Styles */
-
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-
         .accordion-item.active .accordion-content { max-height: 1000px; /* Increased for longer content */ }
-
         .accordion-item.active .accordion-icon { transform: rotate(45deg); }
 
-
-
         /* Alternating Number Styles */
-
         /* Odd Items (1, 3, 5...) */
-
         .module-card:nth-child(odd) .module-number {
-
             background-color: var(--accent-lime);
-
             color: black;
-
             border: none;
-
         }
-
         /* Even Items (2, 4, 6...) */
-
         .module-card:nth-child(even) .module-number {
-
             background-color: transparent;
-
             color: var(--accent-lime);
-
             border: 1px solid var(--accent-lime);
-
         }
-
-
 
         @media (max-width: 767px) { body { background-attachment: scroll; } }
-
     </style>
-
 </head>
-
 <body class="selection:bg-lime-300 selection:text-black">
-
-
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 relative">
 
-
-
         <!-- HEADER -->
-
         <header class="text-center mb-16 md:mb-24 fade-in-up relative z-10">
-
             <div class="mb-6 flex justify-center relative">
-
-                 <div class="absolute inset-0 bg-lime-400 blur-[80px] opacity-10 rounded-full w-40 h-40 mx-auto"></div>
-
-                 <img src="https://raw.githubusercontent.com/djust4funschool-sys/agata/main/zyro-image_(5)-transformed%201.png" alt="Agata Production" class="w-40 h-40 rounded-full object-cover border-4 border-lime-300 shadow-2xl relative z-10">
-
+                 <div class="absolute inset-0 bg-lime-400 blur-[80px] opacity-15 rounded-3xl w-48 h-64 mx-auto"></div>
+                 <img src="https://github.com/djust4funschool-sys/winter_camp/blob/main/IMG_6929.PNG?raw=true" alt="Agata Production" class="w-48 sm:w-56 h-auto rounded-2xl object-cover border-4 border-lime-300 shadow-2xl relative z-10">
             </div>
-
            
-
-            <h3 class="text-lime-300 font-bold tracking-widest text-sm md:text-base mb-2 font-mono">DJUST PRODUCTION PRESENTS</h3>
-
-            <h1 class="hero-title text-6xl sm:text-7xl md:text-9xl text-glow leading-none mb-4" style="color: var(--text-light);">АЛГОРИТМ <span style="color: var(--accent-lime);">ХИТА</span></h1>
-
+            <h3 class="text-lime-300 font-bold tracking-widest text-base mb-2 font-mono">DJUST PRODUCTION PRESENTS</h3>
+            <!-- Increased base size to text-7xl for mobile -->
+            <h1 class="hero-title text-7xl md:text-9xl text-glow leading-none mb-4" style="color: var(--text-light);">АЛГОРИТМ <span style="color: var(--accent-lime);">ХИТА</span></h1>
            
-
-            <p class="max-w-3xl mx-auto mt-6 text-base md:text-lg text-gray-300 main-text leading-relaxed">
-
+            <!-- Increased to text-lg for mobile -->
+            <p class="max-w-3xl mx-auto mt-6 text-lg text-gray-300 main-text leading-relaxed">
                 Курс от школы DJust 4 FUN. Перестань писать демки «в стол». Создай узнаваемый трек с душой, который пробьёт толпу и попадёт на лейбл.
-
             </p>
 
-
-
             <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
-
                 <a href="https://t.me/Agata_DJ4FUN" class="btn btn-primary font-bold text-lg py-4 px-10 rounded-lg inline-block">
-
                     ЗАБРАТЬ АЛГОРИТМ
-
                 </a>
-
             </div>
-
         </header>
-
-
 
         <div class="sound-wave fade-in-up"></div>
 
-
-
         <!-- PROBLEM & SOLUTION -->
-
         <section class="max-w-6xl mx-auto mb-20 fade-in-up">
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
                
-
                 <!-- LEFT: PAIN POINTS -->
-
                 <div class="glass-card p-8 flex flex-col justify-center h-full">
-
-                    <h3 class="section-title text-2xl sm:text-3xl mb-6 text-white leading-tight">ПОЧЕМУ ТВОИ ТРЕКИ <span class="text-lime-300">НЕ РАБОТАЮТ</span> НА ТАНЦПОЛЕ?</h3>
-
-                    <ul class="space-y-6 main-text text-gray-400">
-
+                    <!-- Increased to text-3xl for mobile -->
+                    <h3 class="section-title text-3xl mb-6 text-white leading-tight">ПОЧЕМУ ТВОИ ТРЕКИ <span class="text-lime-300">НЕ РАБОТАЮТ</span> НА ТАНЦПОЛЕ?</h3>
+                    <!-- Increased to text-lg for mobile (was base/sm mix) -->
+                    <ul class="space-y-6 main-text text-gray-400 text-lg">
                         <li class="flex items-start">
-
-                            <span class="text-red-500 mr-3 text-xl">✕</span>
-
+                            <span class="text-red-500 mr-3 text-2xl">✕</span>
                             <div>
-
                                 <strong class="text-gray-200">Идея живая, но нет уверенности.</strong>
-
-                                <p class="text-sm mt-1">Звук не цепляет, нет той магии, которая заставляет людей двигаться.</p>
-
+                                <p class="text-base mt-1">Звук не цепляет, нет той магии, которая заставляет людей двигаться.</p>
                             </div>
-
                         </li>
-
                         <li class="flex items-start">
-
-                            <span class="text-red-500 mr-3 text-xl">✕</span>
-
+                            <span class="text-red-500 mr-3 text-2xl">✕</span>
                             <div>
-
                                 <strong class="text-gray-200">Структура хаотичная.</strong>
-
-                                <p class="text-sm mt-1">Дроп не взрывает, бочка и бас не качают на больших системах, тембры не пробивают.</p>
-
+                                <p class="text-base mt-1">Дроп не взрывает, бочка и бас не качают на больших системах, тембры не пробивают.</p>
                             </div>
-
                         </li>
-
                         <li class="flex items-start">
-
-                            <span class="text-red-500 mr-3 text-xl">✕</span>
-
+                            <span class="text-red-500 mr-3 text-2xl">✕</span>
                             <div>
-
                                 <strong class="text-gray-200">Открываешь проект — и тишина.</strong>
-
-                                <p class="text-sm mt-1">Месяц не можешь написать ни строчки, ищешь вдохновение часами, закрываешь с чувством «не мое», боишься критики.</p>
-
+                                <p class="text-base mt-1">Месяц не можешь написать ни строчки, ищешь вдохновение часами, закрываешь с чувством «не мое», боишься критики.</p>
                             </div>
-
                         </li>
-
                     </ul>
-
                 </div>
-
-
 
                 <!-- RIGHT: SOLUTION & AUTHOR -->
-
                 <div class="glass-card p-8 flex flex-col h-full bg-gradient-to-br from-[#222325] to-[#1a1a1a]">
-
-                    <h3 class="section-title text-2xl sm:text-3xl mb-2 text-white">ЧТО МЫ ИСПРАВИМ</h3>
-
-                    <p class="section-title text-lime-300 mb-6 text-xl">РАЗ И НАВСЕГДА</p>
-
+                    <h3 class="section-title text-3xl mb-2 text-white">ЧТО МЫ ИСПРАВИМ</h3>
+                    <p class="section-title text-lime-300 mb-6 text-2xl">РАЗ И НАВСЕГДА</p>
                    
-
-                    <div class="mb-6 main-text text-gray-300 text-sm border-l-2 border-lime-300 pl-4">
-
+                    <div class="mb-6 main-text text-gray-300 text-base border-l-2 border-lime-300 pl-4">
                         <p class="mb-2"><strong class="text-white">Авторский курс от Андрея PAYSAGE</strong></p>
-
                         <p class="italic opacity-80">15 лет в музыке, 18 хитов, сотни треков. Мой путь — это поиск ответа: как писать музыку с душой?</p>
-
                     </div>
 
-
-
-                    <p class="text-white font-bold mb-4">ТЫ НАУЧИШЬСЯ:</p>
-
-                    <ul class="space-y-3 main-text text-gray-400 text-sm mb-6">
-
+                    <p class="text-white font-bold mb-4 text-lg">ТЫ НАУЧИШЬСЯ:</p>
+                    <!-- Increased to text-base for mobile (was text-sm) -->
+                    <ul class="space-y-3 main-text text-gray-400 text-base mb-6">
                         <li class="flex items-center"><span class="text-lime-300 mr-2">✓</span> «Читать музыку как код»: ритм и энергия.</li>
-
                         <li class="flex items-center"><span class="text-lime-300 mr-2">✓</span> Быстро выходить из ступора и ловить поток.</li>
-
                         <li class="flex items-center"><span class="text-lime-300 mr-2">✓</span> Писать треки с характером для лейблов.</li>
-
                         <li class="flex items-center"><span class="text-lime-300 mr-2">✓</span> Упаковывать себя как артиста.</li>
-
                     </ul>
 
-
-
                     <div class="mt-auto pt-6 border-t border-white/10">
-
-                        <p class="text-lime-300 font-bold text-center">РЕЗУЛЬТАТ ЗА 2 МЕСЯЦА: <br>
-
+                        <p class="text-lime-300 font-bold text-center text-lg">РЕЗУЛЬТАТ ЗА 2 МЕСЯЦА: <br>
                         <span class="text-white font-normal">ГОТОВЫЙ ТРЕК → ЛЕЙБЛ → УВЕРЕННОСТЬ</span></p>
-
                     </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
- <!-- TIMELINE / DURATION (UPDATED BLOCK) -->
-        <section class="max-w-4xl mx-auto mb-20 fade-in-up">
-            <div class="glass-card p-8 relative overflow-hidden text-center">
-                <!-- Decoration background -->
-                <div class="absolute top-0 right-0 w-64 h-64 bg-lime-400 blur-[100px] opacity-10 rounded-full pointer-events-none"></div>
-
-                <div class="relative z-10 flex flex-col items-center justify-center gap-4">
-                     <h3 class="text-3xl md:text-5xl font-bold text-white section-title leading-tight">
-                        ОБУЧЕНИЕ <span class="text-lime-300">[ФЕВРАЛЬ — МАРТ]</span>
-                     </h3>
-                     
-                     <div class="w-24 h-1 bg-lime-300/30 rounded-full my-2"></div>
-                     
-                     <span class="text-xl md:text-2xl font-bold text-gray-200 section-title tracking-widest">
-                        ДЛИТЕЛЬНОСТЬ 2 МЕСЯЦА
-                     </span>
                 </div>
             </div>
         </section>
 
         <!-- PROGRAM MODULES -->
-
         <main id="program">
-
             <div class="text-center mb-12 fade-in-up">
+                <h2 class="section-title text-5xl md:text-6xl text-glow text-lime-300">ПРОГРАММА КУРСА</h2>
+                
+                <div class="mt-6 mb-8">
+                     <!-- Increased sizes for mobile -->
+                     <p class="text-2xl md:text-3xl text-white font-bold section-title tracking-wide mb-2">ОБУЧЕНИЕ [ФЕВРАЛЬ — МАРТ]</p>
+                     <p class="text-xl text-gray-300 main-text">Длительность: 2 месяца</p>
+                </div>
 
-                <h2 class="section-title text-4xl sm:text-5xl md:text-6xl text-glow text-lime-300">ПРОГРАММА КУРСА</h2>
-
-                <p class="mt-4 text-gray-400 main-text max-w-2xl mx-auto">Авторский путь Андрея PAYSAGE, упакованный в алгоритм успеха. Такой формулой не делится ни одна школа!</p>
-
+                <p class="text-gray-400 main-text text-lg max-w-2xl mx-auto">Авторский путь Андрея PAYSAGE, упакованный в алгоритм успеха. Такой формулой не делится ни одна школа!</p>
             </div>
-
-
 
             <div class="max-w-4xl mx-auto space-y-4 fade-in-up">
-
                
-
                 <!-- MODULE 1 -->
-
                 <div class="glass-card p-1 module-card">
-
                     <div class="accordion-item bg-transparent">
-
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
-
                             <div class="flex items-center gap-4">
-
                                 <span class="module-number font-bold font-mono w-10 h-10 flex-shrink-0 flex items-center justify-center rounded transition-colors duration-300">01</span>
-
-                                <h3 class="font-bold text-lg sm:text-xl text-white section-title uppercase">Основы интерфейса</h3>
-
+                                <!-- Increased to text-xl for mobile -->
+                                <h3 class="font-bold text-xl text-white section-title uppercase">Основы интерфейса</h3>
                             </div>
-
                             <svg class="accordion-icon w-6 h-6 text-lime-300 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-
                         </div>
-
                         <div class="accordion-content">
-
                             <div class="p-6 pt-0 border-t border-white/5">
-
                                 <div class="mt-4 grid md:grid-cols-2 gap-6">
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">В этом модуле:</p>
-
-                                        <ul class="space-y-2 text-sm text-gray-300 main-text list-disc list-inside">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">В этом модуле:</p>
+                                        <!-- Increased to text-base for mobile (was text-sm) -->
+                                        <ul class="space-y-2 text-base text-gray-300 main-text list-disc list-inside">
                                             <li>Познакомитесь с Ableton Live через практику</li>
-
                                             <li>Поймёте основную логику программы</li>
-
                                             <li>Научитесь ориентироваться в интерфейсе</li>
-
                                             <li>Разберёте, из каких инструментов состоит трек</li>
-
                                         </ul>
-
                                     </div>
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">После модуля вы:</p>
-
-                                        <p class="text-sm text-gray-400 main-text leading-relaxed">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">После модуля вы:</p>
+                                        <!-- Increased to text-base for mobile (was text-sm) -->
+                                        <p class="text-base text-gray-400 main-text leading-relaxed">
                                             Научитесь уверенно ориентироваться в интерфейсе, работать с браузером, настраивать аудио и MIDI клипы, пользоваться цепочками эффектов и горячими клавишами, создав комфортную среду.
-
                                         </p>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
 
                 <!-- MODULE 2 -->
-
                 <div class="glass-card p-1 module-card">
-
                     <div class="accordion-item bg-transparent">
-
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
-
                             <div class="flex items-center gap-4">
-
                                 <span class="module-number font-bold font-mono w-10 h-10 flex-shrink-0 flex items-center justify-center rounded transition-colors duration-300">02</span>
-
-                                <h3 class="font-bold text-lg sm:text-xl text-white section-title uppercase">Аудио в Ableton Live</h3>
-
+                                <h3 class="font-bold text-xl text-white section-title uppercase">Аудио в Ableton Live</h3>
                             </div>
-
                             <svg class="accordion-icon w-6 h-6 text-lime-300 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-
                         </div>
-
                         <div class="accordion-content">
-
                             <div class="p-6 pt-0 border-t border-white/5">
-
                                 <div class="mt-4 grid md:grid-cols-2 gap-6">
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">Темы:</p>
-
-                                        <ul class="space-y-2 text-sm text-gray-300 main-text list-disc list-inside">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">Темы:</p>
+                                        <ul class="space-y-2 text-base text-gray-300 main-text list-disc list-inside">
                                             <li>Работа с аудиоклипами</li>
-
                                             <li>Как устроены ударные в реальном треке</li>
-
                                             <li>Почему один kick «качающий», а другой нет</li>
-
                                             <li>Грув — это отношения звуков, а не количество</li>
-
                                         </ul>
-
                                     </div>
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">После модуля вы:</p>
-
-                                        <p class="text-sm text-gray-400 main-text leading-relaxed">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">После модуля вы:</p>
+                                        <p class="text-base text-gray-400 main-text leading-relaxed">
                                             Сможете разбирать ударные по слоям, импортировать и подгонять аудио под BPM, делать грув живым и аккуратным, понимая работу тайминга.
-
                                         </p>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
 
                 <!-- MODULE 3 -->
-
                 <div class="glass-card p-1 module-card">
-
                     <div class="accordion-item bg-transparent">
-
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
-
                             <div class="flex items-center gap-4">
-
                                 <span class="module-number font-bold font-mono w-10 h-10 flex-shrink-0 flex items-center justify-center rounded transition-colors duration-300">03</span>
-
-                                <h3 class="font-bold text-lg sm:text-xl text-white section-title uppercase">MIDI, бас и гармония</h3>
-
+                                <h3 class="font-bold text-xl text-white section-title uppercase">MIDI, бас и гармония</h3>
                             </div>
-
                             <svg class="accordion-icon w-6 h-6 text-lime-300 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-
                         </div>
-
                         <div class="accordion-content">
-
                             <div class="p-6 pt-0 border-t border-white/5">
-
                                 <div class="mt-4 grid md:grid-cols-2 gap-6">
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">Цели модуля:</p>
-
-                                        <ul class="space-y-2 text-sm text-gray-300 main-text list-disc list-inside">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">Цели модуля:</p>
+                                        <ul class="space-y-2 text-base text-gray-300 main-text list-disc list-inside">
                                             <li>Поймёте строение баса и гармонии</li>
-
                                             <li>Научитесь создавать MIDI-партии, работающие с грувом</li>
-
                                             <li>Свяжете ритм, ноты и энергию</li>
-
                                             <li>Сделаете бас, который дружит с kick</li>
-
                                         </ul>
-
                                     </div>
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">После модуля вы:</p>
-
-                                        <p class="text-sm text-gray-400 main-text leading-relaxed">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">После модуля вы:</p>
+                                        <p class="text-base text-gray-400 main-text leading-relaxed">
                                             Научитесь добавлять MIDI-дорожки, создавать и редактировать ноты (velocity, длина), делать партии живыми, использовать встроенные инструменты и VST, соблюдая тональность.
-
                                         </p>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
 
                 <!-- MODULE 4 (Renamed from 5) -->
-
                 <div class="glass-card p-1 module-card">
-
                     <div class="accordion-item bg-transparent">
-
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
-
                             <div class="flex items-center gap-4">
-
                                 <span class="module-number font-bold font-mono w-10 h-10 flex-shrink-0 flex items-center justify-center rounded transition-colors duration-300">04</span>
-
-                                <h3 class="font-bold text-lg sm:text-xl text-white section-title uppercase">Базовая звукорежиссура</h3>
-
+                                <h3 class="font-bold text-xl text-white section-title uppercase">Базовая звукорежиссура</h3>
                             </div>
-
                             <svg class="accordion-icon w-6 h-6 text-lime-300 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-
                         </div>
-
                         <div class="accordion-content">
-
                             <div class="p-6 pt-0 border-t border-white/5">
-
                                 <div class="mt-4 grid md:grid-cols-2 gap-6">
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">Темы:</p>
-
-                                        <ul class="space-y-2 text-sm text-gray-300 main-text list-disc list-inside">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">Темы:</p>
+                                        <ul class="space-y-2 text-base text-gray-300 main-text list-disc list-inside">
                                             <li>Эквалайзер (EQ Eight): срезы, частоты</li>
-
                                             <li>Компрессор: атака, релиз</li>
-
                                             <li>Сатурация и Лимитер</li>
-
                                             <li>Управление громкостью</li>
-
                                         </ul>
-
                                     </div>
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">После модуля вы:</p>
-
-                                        <p class="text-sm text-gray-400 main-text leading-relaxed">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">После модуля вы:</p>
+                                        <p class="text-base text-gray-400 main-text leading-relaxed">
                                             Будете использовать EQ для очистки микса, компрессию для плотности, сатурацию для окраски и лимитер для контроля. Научитесь выстраивать баланс без перегрузов.
-
                                         </p>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
 
                 <!-- MODULE 5 (Renamed from 6) -->
-
                 <div class="glass-card p-1 module-card">
-
                     <div class="accordion-item bg-transparent">
-
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
-
                             <div class="flex items-center gap-4">
-
                                 <span class="module-number font-bold font-mono w-10 h-10 flex-shrink-0 flex items-center justify-center rounded transition-colors duration-300">05</span>
-
-                                <h3 class="font-bold text-lg sm:text-xl text-white section-title uppercase">Реверберация, дилэй, атмосферность</h3>
-
+                                <h3 class="font-bold text-xl text-white section-title uppercase">Реверберация, дилэй, атмосферность</h3>
                             </div>
-
                             <svg class="accordion-icon w-6 h-6 text-lime-300 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-
                         </div>
-
                         <div class="accordion-content">
-
                             <div class="p-6 pt-0 border-t border-white/5">
-
                                 <div class="mt-4 grid md:grid-cols-2 gap-6">
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">Темы:</p>
-
-                                        <ul class="space-y-2 text-sm text-gray-300 main-text list-disc list-inside">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">Темы:</p>
+                                        <ul class="space-y-2 text-base text-gray-300 main-text list-disc list-inside">
                                             <li>Reverb: размер, decay, predelay</li>
-
                                             <li>Delay: ping-pong, tape</li>
-
                                             <li>Send/Return каналы</li>
-
                                             <li>Параллельная обработка</li>
-
                                         </ul>
-
                                     </div>
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">После модуля вы:</p>
-
-                                        <p class="text-sm text-gray-400 main-text leading-relaxed">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">После модуля вы:</p>
+                                        <p class="text-base text-gray-400 main-text leading-relaxed">
                                             Научитесь создавать пространство (глубину), использовать дилэй для ритмики и стерео, настраивать Send/Return для экономии ресурсов и общей атмосферы трека.
-
                                         </p>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
 
                 <!-- MODULE 6 (Renamed from 7) -->
-
                 <div class="glass-card p-1 module-card">
-
                     <div class="accordion-item bg-transparent">
-
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
-
                             <div class="flex items-center gap-4">
-
                                 <span class="module-number font-bold font-mono w-10 h-10 flex-shrink-0 flex items-center justify-center rounded transition-colors duration-300">06</span>
-
-                                <h3 class="font-bold text-lg sm:text-xl text-white section-title uppercase">Аранжировка</h3>
-
+                                <h3 class="font-bold text-xl text-white section-title uppercase">Аранжировка</h3>
                             </div>
-
                             <svg class="accordion-icon w-6 h-6 text-lime-300 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-
                         </div>
-
                         <div class="accordion-content">
-
                             <div class="p-6 pt-0 border-t border-white/5">
-
                                 <div class="mt-4 grid md:grid-cols-2 gap-6">
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">Темы:</p>
-
-                                        <ul class="space-y-2 text-sm text-gray-300 main-text list-disc list-inside">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">Темы:</p>
+                                        <ul class="space-y-2 text-base text-gray-300 main-text list-disc list-inside">
                                             <li>Структура: Intro, Drop, Break, Outro</li>
-
                                             <li>Работа в Arrangement View</li>
-
                                             <li>Автоматизация громкости и эффектов</li>
-
                                             <li>Создание переходов и маркеров</li>
-
                                         </ul>
-
                                     </div>
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">После модуля вы:</p>
-
-                                        <p class="text-sm text-gray-400 main-text leading-relaxed">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">После модуля вы:</p>
+                                        <p class="text-base text-gray-400 main-text leading-relaxed">
                                             Сможете строить полноценную структуру и драматургию трека. Использовать автоматизацию для создания движения и нарастаний. Делать профессиональные переходы между частями.
-
                                         </p>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
 
                 <!-- MODULE 7 (Renamed from 8) -->
-
                 <div class="glass-card p-1 module-card">
-
                     <div class="accordion-item bg-transparent">
-
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
-
                             <div class="flex items-center gap-4">
-
                                 <span class="module-number font-bold font-mono w-10 h-10 flex-shrink-0 flex items-center justify-center rounded transition-colors duration-300">07</span>
-
-                                <h3 class="font-bold text-lg sm:text-xl text-white section-title uppercase">Сведение</h3>
-
+                                <h3 class="font-bold text-xl text-white section-title uppercase">Сведение</h3>
                             </div>
-
                             <svg class="accordion-icon w-6 h-6 text-lime-300 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-
                         </div>
-
                         <div class="accordion-content">
-
                             <div class="p-6 pt-0 border-t border-white/5">
-
                                 <div class="mt-4 grid md:grid-cols-2 gap-6">
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">Темы:</p>
-
-                                        <ul class="space-y-2 text-sm text-gray-300 main-text list-disc list-inside">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">Темы:</p>
+                                        <ul class="space-y-2 text-base text-gray-300 main-text list-disc list-inside">
                                             <li>Баланс громкостей</li>
-
                                             <li>Эквализация конфликтов</li>
-
                                             <li>Сайдчейн компрессия</li>
-
                                             <li>Работа со стерео и группами</li>
-
                                         </ul>
-
                                     </div>
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">После модуля вы:</p>
-
-                                        <p class="text-sm text-gray-400 main-text leading-relaxed">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">После модуля вы:</p>
+                                        <p class="text-base text-gray-400 main-text leading-relaxed">
                                             Научитесь выстраивать баланс, устранять частотные конфликты, применять сайдчейн, работать с панорамой и группами инструментов, используя референсы для контроля качества.
-
                                         </p>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
 
                 <!-- MODULE 8 (Renamed from 9) -->
-
                 <div class="glass-card p-1 module-card">
-
                     <div class="accordion-item bg-transparent">
-
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
-
                             <div class="flex items-center gap-4">
-
                                 <span class="module-number font-bold font-mono w-10 h-10 flex-shrink-0 flex items-center justify-center rounded transition-colors duration-300">08</span>
-
-                                <h3 class="font-bold text-lg sm:text-xl text-white section-title uppercase">Постобработка</h3>
-
+                                <h3 class="font-bold text-xl text-white section-title uppercase">Постобработка</h3>
                             </div>
-
                             <svg class="accordion-icon w-6 h-6 text-lime-300 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-
                         </div>
-
                         <div class="accordion-content">
-
                             <div class="p-6 pt-0 border-t border-white/5">
-
                                 <div class="mt-4 grid md:grid-cols-2 gap-6">
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">Темы:</p>
-
-                                        <ul class="space-y-2 text-sm text-gray-300 main-text list-disc list-inside">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">Темы:</p>
+                                        <ul class="space-y-2 text-base text-gray-300 main-text list-disc list-inside">
                                             <li>EQ и Saturation на мастере</li>
-
                                             <li>Glue Compressor</li>
-
                                             <li>Limiter, LUFS, headroom</li>
-
                                             <li>Правильный экспорт трека</li>
-
                                         </ul>
-
                                     </div>
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">После модуля вы:</p>
-
-                                        <p class="text-sm text-gray-400 main-text leading-relaxed">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">После модуля вы:</p>
+                                        <p class="text-base text-gray-400 main-text leading-relaxed">
                                             Сможете финализировать трек: склеивать микс, добавлять теплоты, настраивать громкость под стандарты площадок и экспортировать качественный мастер-файл для релиза.
-
                                         </p>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
 
                 <!-- MODULE 9 (Renamed from 10) -->
-
                 <div class="glass-card p-1 module-card">
-
                     <div class="accordion-item bg-transparent">
-
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
-
                             <div class="flex items-center gap-4">
-
                                 <span class="module-number font-bold font-mono w-10 h-10 flex-shrink-0 flex items-center justify-center rounded transition-colors duration-300">09</span>
-
-                                <h3 class="font-bold text-lg sm:text-xl text-white section-title uppercase">Создание трека с нуля</h3>
-
+                                <h3 class="font-bold text-xl text-white section-title uppercase">Создание трека с нуля</h3>
                             </div>
-
                             <svg class="accordion-icon w-6 h-6 text-lime-300 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-
                         </div>
-
                         <div class="accordion-content">
-
                             <div class="p-6 pt-0 border-t border-white/5">
-
                                 <div class="mt-4 grid md:grid-cols-2 gap-6">
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">Темы:</p>
-
-                                        <ul class="space-y-2 text-sm text-gray-300 main-text list-disc list-inside">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">Темы:</p>
+                                        <ul class="space-y-2 text-base text-gray-300 main-text list-disc list-inside">
                                             <li>Создание идеи и выбор атмосферы</li>
-
                                             <li>Подбор звуков и ритма</li>
-
                                             <li>Быстрая аранжировка и сведение</li>
-
                                             <li>Мастеринг и Экспорт</li>
-
                                         </ul>
-
                                     </div>
-
                                     <div>
-
-                                        <p class="text-lime-300 font-bold text-sm mb-2 uppercase tracking-wide">После модуля вы:</p>
-
-                                        <p class="text-sm text-gray-400 main-text leading-relaxed">
-
+                                        <p class="text-lime-300 font-bold text-base mb-2 uppercase tracking-wide">После модуля вы:</p>
+                                        <p class="text-base text-gray-400 main-text leading-relaxed">
                                             Полностью реализуете идею от концепции до готового трека, применив все навыки курса на практике.
-
                                         </p>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
 
-
-
             </div>
-
         </main>
 
-
-
-     <!-- Секция ФОРМАТЫ УЧАСТИЯ — заменить текущую в твоём коде (file:45) -->
-
-<section class="mt-24 fade-in-up">
-
-    <h2 class="section-title text-center text-4xl mb-12 text-glow">ФОРМАТЫ УЧАСТИЯ</h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-
-        
-
-        <!-- BAZA -->
-
-        <div class="glass-card p-8 flex flex-col hover:border-lime-300/50 transition duration-500">
-
-            <h3 class="section-title text-2xl mb-2 text-gray-300">DJust PRODUCTION: BAZA</h3>
-
-            <div class="text-4xl font-bold text-white mb-6 font-mono">65 000 ₽</div>
-
-            <ul class="space-y-4 mb-8 flex-grow main-text text-gray-300 text-sm">
-
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Онлайн уроки с Андреем</li>
-
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Доступ ко всем урокам в записи</li>
-
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Проверка домашних заданий</li>
-
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Доступ 1,5 месяца</li>
-
-            </ul>
-
-            <a href="https://t.me/djust_baza" class="btn btn-primary text-center py-4 rounded-lg font-bold mt-auto block hover:scale-105">
-
-                ВЫБРАТЬ BAZA
-
-            </a>
-
-        </div>
-
-
-
-        <!-- SUPREME (RECOMMENDED) -->
-
-        <div class="glass-card p-8 flex flex-col relative border-lime-300/30 shadow-[0_0_30px_rgba(220,255,27,0.1)] hover:shadow-[0_0_40px_rgba(220,255,27,0.2)]">
-
-            <div class="absolute top-0 right-0 bg-lime-300 text-black text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg z-10">TOP</div>
-
-            <h3 class="section-title text-2xl mb-2 text-lime-300">DJust PRODUCTION: SUPREME</h3>
-
-            <div class="text-4xl font-bold text-white mb-6 font-mono">95 000 ₽</div> 
-
-            <ul class="space-y-4 mb-8 flex-grow main-text text-gray-300 text-sm">
-
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Все опции тарифа BAZA</li>
-
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Еженедельные мастермайнды с Андреем, где разбираем вопросы</li>
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Доступ 3 месяца</li>
-                
-            </ul>
-
-            <a href="https://t.me/djust_supreme" class="btn btn-primary text-center py-4 rounded-lg font-bold mt-auto block hover:scale-105 bg-gradient-to-r from-lime-400 to-emerald-400">
-
-                ВЫБРАТЬ SUPREME
-
-            </a>
-
-        </div>
-
-
-
-        <!-- ALL IN -->
-
-        <div class="glass-card p-8 flex flex-col hover:border-lime-300/50 transition duration-500">
-
-            <h3 class="section-title text-2xl mb-2 text-gray-300">DJust PRODUCTION: ALL IN</h3>
-
-             <div class="text-4xl font-bold text-white mb-6 font-mono">185 000 ₽</div> 
-
-            <ul class="space-y-3 mb-8 flex-grow main-text text-gray-300 text-sm">
-
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Все опции тарифа SUPREME</li>
-
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Личная сессия на 1,5 часа с Андреем по вашему треку</li>
-
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Общий Zoom с Андреем: разбирает написание своего хита</li>
-
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>2 мастермайнда с Агатой по самопродвижению</li>
-                 <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Доступ 6 месяцев</li>
-
-            </ul>
-
-            <a href="https://t.me/djust_allin" class="btn btn-primary text-center py-4 rounded-lg font-bold mt-auto block hover:scale-105">
-
-                ВЫБРАТЬ ALL IN
-
-            </a>
-
-        </div>
-
-
-
     </div>
-
-</section>
-
-        <!-- FOOTER -->
-
-        <footer class="mt-24 py-8 border-t border-white/5 text-center text-gray-500 text-sm">
-
-            <p class="font-mono">© 2026 DJust 4 Fun. Все права защищены.
-
-ИП Захарова-Хлущевская Агата Онореевна
-
-ИНН: 772578516741
-
-ОГРНИП: 324774600133556.</p>
-
-        </footer>
-
-
-
-    </div>
-
-
-
-    <!-- SCRIPTS -->
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Register GSAP ScrollTrigger
+            gsap.registerPlugin(ScrollTrigger);
 
-        // Init GSAP
-
-        gsap.registerPlugin(ScrollTrigger);
-
-
-
-        // Fade Up Animation for sections
-
-        gsap.utils.toArray('.fade-in-up').forEach(element => {
-
-            gsap.to(element, {
-
-                opacity: 1,
-
-                y: 0,
-
-                duration: 1,
-
-                ease: 'power3.out',
-
-                scrollTrigger: {
-
-                    trigger: element,
-
-                    start: 'top 85%',
-
-                    toggleActions: 'play none none reverse'
-
-                }
-
-            });
-
-        });
-
-
-
-        // Accordion Logic
-
-        document.querySelectorAll('.accordion-header').forEach(button => {
-
-            button.addEventListener('click', () => {
-
-                const item = button.parentElement; // Corrected: Target .accordion-item directly
-
-                const isActive = item.classList.contains('active');
-
-               
-
-                // Close all others
-
-                document.querySelectorAll('.accordion-item').forEach(otherItem => {
-
-                    if (otherItem !== item) {
-
-                        otherItem.classList.remove('active');
-
-                    }
-
+            // Animate Fade-in-up Elements
+            gsap.utils.toArray('.fade-in-up').forEach((element, i) => {
+                gsap.to(element, {
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "top 85%", // Animation starts when top of element hits 85% of viewport
+                        toggleActions: "play none none reverse"
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                    ease: "power3.out",
+                    delay: i * 0.1 // Stagger effect
                 });
-
-
-
-                // Toggle current
-
-                if (!isActive) {
-
-                    item.classList.add('active');
-
-                } else {
-
-                    item.classList.remove('active');
-
-                }
-
             });
 
-        });
+            // Accordion Logic
+            const accordions = document.querySelectorAll('.accordion-header');
 
+            accordions.forEach(acc => {
+                acc.addEventListener('click', () => {
+                    const item = acc.parentElement;
+                    const isActive = item.classList.contains('active');
+
+                    // Close all others (optional - remove if you want multiple open)
+                    // document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+
+                    if (!isActive) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            });
+        });
     </script>
 
-</body>
+  <!-- Секция ФОРМАТЫ УЧАСТИЯ — заменить текущую в твоём коде (file:45) -->
+<section class="mt-24 fade-in-up">
+    <h2 class="section-title text-center text-4xl mb-12 text-glow">ФОРМАТЫ УЧАСТИЯ</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        
+        <!-- BAZA -->
+        <div class="glass-card p-8 flex flex-col hover:border-lime-300/50 transition duration-500">
+            <h3 class="section-title text-2xl mb-2 text-gray-300">DJust PRODUCTION: BAZA</h3>
+            <div class="text-4xl font-bold text-white mb-6 font-mono">65 000 ₽</div>
+            <ul class="space-y-4 mb-8 flex-grow main-text text-gray-300 text-sm">
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Онлайн уроки с Андреем</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Доступ ко всем урокам в записи</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Проверка домашних заданий</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Доступ 2 месяца</li>
+            </ul>
+            <a href="https://t.me/djust_baza" class="btn btn-primary text-center py-4 rounded-lg font-bold mt-auto block hover:scale-105">
+                ВЫБРАТЬ BAZA
+            </a>
+        </div>
 
-</html>
+        <!-- SUPREME (RECOMMENDED) -->
+        <div class="glass-card p-8 flex flex-col relative border-lime-300/30 shadow-[0_0_30px_rgba(220,255,27,0.1)] hover:shadow-[0_0_40px_rgba(220,255,27,0.2)]">
+            <div class="absolute top-0 right-0 bg-lime-300 text-black text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg z-10">SUPREME</div>
+            <h3 class="section-title text-2xl mb-2 text-lime-300">DJust PRODUCTION: SUPREME</h3>
+            <p class="text-sm text-gray-500 mb-6 font-mono tracking-widest uppercase">Рекомендуем для быстрого результата</p>
+            <ul class="space-y-4 mb-8 flex-grow main-text text-gray-300 text-sm">
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Все опции тарифа BAZA</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Еженедельные мастермайнды с Андреем с ответами на вопросы</li>
+            </ul>
+            <a href="https://t.me/djust_supreme" class="btn btn-primary text-center py-4 rounded-lg font-bold mt-auto block hover:scale-105 bg-gradient-to-r from-lime-400 to-emerald-400">
+                ВЫБРАТЬ SUPREME
+            </a>
+        </div>
+
+        <!-- ALL IN -->
+        <div class="glass-card p-8 flex flex-col hover:border-lime-300/50 transition duration-500">
+            <h3 class="section-title text-2xl mb-2 text-gray-300">DJust PRODUCTION: ALL IN</h3>
+            <p class="text-sm text-gray-500 mb-6 font-mono tracking-widest uppercase">Полное сопровождение до релиза</p>
+            <ul class="space-y-3 mb-8 flex-grow main-text text-gray-300 text-sm">
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Все опции тарифа SUPREME</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Личная сессия на 1,5 часа с Андреем по вашему треку</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Общий Zoom с Андреем: разбирает написание своего хита</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>2 мастермайнда с Агатой по самопродвижению</li>
+            </ul>
+            <a href="https://t.me/djust_allin" class="btn btn-primary text-center py-4 rounded-lg font-bold mt-auto block hover:scale-105">
+                ВЫБРАТЬ ALL IN
+            </a>
+        </div>
+
+    </div>
+</section>
