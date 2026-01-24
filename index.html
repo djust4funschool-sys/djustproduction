@@ -107,9 +107,16 @@
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
 
+        /* Adjusted Glow for Mobile */
         .text-glow {
-            text-shadow: 0 0 20px rgba(220, 255, 27, 0.5), 0 0 40px rgba(220, 255, 27, 0.3);
+            text-shadow: 0 0 10px rgba(220, 255, 27, 0.3), 0 0 20px rgba(220, 255, 27, 0.2);
         }
+        @media (min-width: 768px) {
+            .text-glow {
+                text-shadow: 0 0 20px rgba(220, 255, 27, 0.5), 0 0 40px rgba(220, 255, 27, 0.3);
+            }
+        }
+
 
         .fade-in-up { opacity: 0; transform: translateY(60px); }
        
@@ -553,11 +560,11 @@
             </div>
         </main>
 
-    <!-- PRICING / FORMATS -->
-<section class="mt-24 fade-in-up">
-    <h2 class="section-title text-center text-4xl mb-12 text-glow">ФОРМАТЫ УЧАСТИЯ</h2>
-    <!-- Изменил: grid-cols-1 md:grid-cols-3 (было 2), увеличил max-w до 7xl -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <!-- PRICING / FORMATS -->
+        <section class="mt-24 fade-in-up">
+            <h2 class="section-title text-center text-4xl sm:text-5xl md:text-6xl text-lime-300 mb-12 text-glow">ФОРМАТЫ УЧАСТИЯ</h2>
+            <!-- Изменил: grid-cols-1 md:grid-cols-3 (было 2), увеличил max-w до 7xl -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
        
         <!-- BAZA -->
         <div class="glass-card p-8 flex flex-col hover:border-lime-300/50 transition duration-500">
