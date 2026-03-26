@@ -5,18 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DJust PRODUCTION: Алгоритм Хита</title>
     <script src="https://cdn.tailwindcss.com"></script>
-   
-    <!-- GSAP Animation Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-   
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Staatliches&display=swap" rel="stylesheet">
-
     <style>
-        /* --- FONTS & VARS --- */
         @font-face {
             font-family: 'Buyan';
             src: url('https://raw.githubusercontent.com/djust4funschool-sys/autumn_camp/main/fonts/Buyan.woff') format('woff');
@@ -24,7 +18,6 @@
             font-style: normal;
             font-display: swap;
         }
-
         @font-face {
             font-family: 'TT Firs Neue';
              src: url('https://raw.githubusercontent.com/djust4funschool-sys/autumn_camp/main/fonts/TT-Firs-Neue-Regular.woff') format('woff');
@@ -32,7 +25,6 @@
             font-style: normal;
             font-display: swap;
         }
-
         :root {
             --bg-dark: #0A0A0A;
             --bg-secondary: #111111;
@@ -42,10 +34,8 @@
             --surface-glass: rgba(255, 255, 255, 0.03);
             --border-glass: rgba(255, 255, 255, 0.08);
         }
-       
         ::selection { background-color: var(--accent-lime); color: #000; }
         ::-moz-selection { background-color: var(--accent-lime); color: #000; }
-
         body {
             background:
                 linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.9)),
@@ -56,8 +46,6 @@
             scroll-behavior: smooth;
             overflow-x: hidden;
         }
-
-        /* --- TYPOGRAPHY --- */
         .section-title, .hero-title {
             font-family: 'Buyan', 'Staatliches', sans-serif !important;
             text-transform: uppercase;
@@ -65,8 +53,6 @@
             font-weight: bold;
         }
         .main-text { font-family: 'TT Firs Neue', 'Montserrat', sans-serif !important; }
-
-        /* --- BUTTONS --- */
         .btn { transition: all 0.3s ease; }
         .btn-primary {
             background: linear-gradient(135deg, var(--accent-lime) 0%, var(--accent-lime-darker) 100%);
@@ -90,8 +76,6 @@
             background-color: var(--surface-glass);
             border-color: rgba(220, 255, 27, 0.15);
         }
-
-        /* --- CARDS & UI --- */
         .glass-card {
             background-color: #222325;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 256 256'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' result='noise' seed='2'/%3E%3CfeColorMatrix in='noise' type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
@@ -106,8 +90,6 @@
             border-color: rgba(220, 255, 27, 0.15);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
-
-        /* Adjusted Glow for Mobile */
         .text-glow {
             text-shadow: 0 0 10px rgba(220, 255, 27, 0.3), 0 0 20px rgba(220, 255, 27, 0.2);
         }
@@ -116,13 +98,8 @@
                 text-shadow: 0 0 20px rgba(220, 255, 27, 0.5), 0 0 40px rgba(220, 255, 27, 0.3);
             }
         }
-
-
         .fade-in-up { opacity: 0; transform: translateY(60px); }
-       
         .hero-title span { display: inline-block; }
-
-        /* Sound Wave Animation */
         .sound-wave {
             width: 100%; height: 2px;
             background: linear-gradient(90deg, transparent, var(--accent-lime), transparent);
@@ -133,62 +110,40 @@
             0%, 100% { transform: scaleX(0.5) scaleY(1); opacity: 0.5; }
             50% { transform: scaleX(1.5) scaleY(3); opacity: 1; }
         }
-
-        /* Accordion Styles */
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .accordion-item.active .accordion-content { max-height: 1000px; /* Increased for longer content */ }
+        .accordion-item.active .accordion-content { max-height: 1000px; }
         .accordion-item.active .accordion-icon { transform: rotate(45deg); }
-
-        /* Alternating Number Styles */
-        /* Odd Items (1, 3, 5...) */
         .module-card:nth-child(odd) .module-number {
             background-color: var(--accent-lime);
             color: black;
             border: none;
         }
-        /* Even Items (2, 4, 6...) */
         .module-card:nth-child(even) .module-number {
             background-color: transparent;
             color: var(--accent-lime);
             border: 1px solid var(--accent-lime);
         }
-
         @media (max-width: 767px) { body { background-attachment: scroll; } }
     </style>
 </head>
 <body class="selection:bg-lime-300 selection:text-black">
-
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 relative">
-
-        <!-- HEADER -->
         <header class="text-center mb-16 md:mb-24 fade-in-up relative z-10">
-            <div class="mb-6 flex justify-center relative">
-                 <div class="absolute inset-0 bg-lime-400 blur-[80px] opacity-20 rounded-2xl w-64 md:w-80 h-full mx-auto"></div>
-                 <!-- ИЗМЕНЕНО: Новое фото, прямоугольная форма -->
-                 <img src="https://github.com/djust4funschool-sys/winter_camp/blob/main/IMG_6929.PNG?raw=true" alt="Agata Production" class="w-64 md:w-80 h-auto rounded-2xl object-cover border-4 border-lime-300 shadow-2xl relative z-10">
-            </div>
-           
             <h3 class="text-lime-300 font-light tracking-widest text-sm md:text-base mb-2 font-mono">АЛГОРИТМ ХИТА</h3>
             <h1 class="hero-title text-6xl sm:text-7xl md:text-9xl text-glow leading-none mb-4" style="color: var(--text-light);">DJUST <span style="color: var(--accent-lime);">PRODUCTION</span></h1>
-           
             <p class="max-w-3xl mx-auto mt-6 text-base md:text-lg text-gray-300 main-text leading-relaxed">
                 Курс от школы DJust 4 FUN. Перестань писать демки «в стол». Создай узнаваемый трек с душой, который пробьёт толпу и попадёт на лейбл.
             </p>
-
+            <p class="text-lime-300 font-bold text-xl md:text-2xl mt-4 mb-6 tracking-wider text-center">СТАРТ 30 МАРТА</p>
             <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
-                <a href="https://t.me/Agata_DJ4FUN" class="btn btn-primary font-bold text-lg py-4 px-10 rounded-lg inline-block">
-                    ЗАБРАТЬ АЛГОРИТМ
-                </a>
+                <a href="#pricing" class="btn btn-primary font-bold text-lg py-4 px-10 rounded-lg inline-block">ВЫБРАТЬ ТАРИФ</a>
             </div>
         </header>
 
         <div class="sound-wave fade-in-up"></div>
 
-        <!-- PROBLEM & SOLUTION -->
         <section class="max-w-6xl mx-auto mb-20 fade-in-up">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-               
-                <!-- LEFT: PAIN POINTS -->
                 <div class="glass-card p-8 flex flex-col justify-center h-full">
                     <h3 class="section-title text-2xl sm:text-3xl mb-6 text-white leading-tight">ПОЧЕМУ ТВОИ ТРЕКИ <span class="text-lime-300">НЕ РАБОТАЮТ</span> НА ТАНЦПОЛЕ?</h3>
                     <ul class="space-y-6 main-text text-gray-400">
@@ -216,16 +171,13 @@
                     </ul>
                 </div>
 
-                <!-- RIGHT: SOLUTION & AUTHOR -->
                 <div class="glass-card p-8 flex flex-col h-full bg-gradient-to-br from-[#222325] to-[#1a1a1a]">
                     <h3 class="section-title text-2xl sm:text-3xl mb-2 text-white">ЧТО МЫ ИСПРАВИМ</h3>
                     <p class="section-title text-lime-300 mb-6 text-xl">РАЗ И НАВСЕГДА</p>
-                   
                     <div class="mb-6 main-text text-gray-300 text-sm border-l-2 border-lime-300 pl-4">
                         <p class="mb-2"><strong class="text-white">Авторский курс от Андрея PAYSAGE</strong></p>
                         <p class="italic opacity-80">15 лет в музыке, 18 хитов, сотни треков. Мой путь — это поиск ответа: как писать музыку с душой?</p>
                     </div>
-
                     <p class="text-white font-bold mb-4">ТЫ НАУЧИШЬСЯ:</p>
                     <ul class="space-y-3 main-text text-gray-400 text-sm mb-6">
                         <li class="flex items-center"><span class="text-lime-300 mr-2">✓</span> «Читать музыку как код»: ритм и энергия.</li>
@@ -233,7 +185,6 @@
                         <li class="flex items-center"><span class="text-lime-300 mr-2">✓</span> Писать треки с характером для лейблов.</li>
                         <li class="flex items-center"><span class="text-lime-300 mr-2">✓</span> Упаковывать себя как артиста.</li>
                     </ul>
-
                     <div class="mt-auto pt-6 border-t border-white/10">
                         <p class="text-lime-300 font-bold text-center">РЕЗУЛЬТАТ ЗА 2 МЕСЯЦА: <br>
                         <span class="text-white font-normal">ГОТОВЫЙ ТРЕК → ЛЕЙБЛ → УВЕРЕННОСТЬ</span></p>
@@ -242,16 +193,12 @@
             </div>
         </section>
 
-        <!-- PROGRAM MODULES -->
         <main id="program">
             <div class="text-center mb-12 fade-in-up">
                 <h2 class="section-title text-4xl sm:text-5xl md:text-6xl text-glow text-lime-300">ПРОГРАММА КУРСА</h2>
                 <p class="mt-4 text-gray-400 main-text max-w-2xl mx-auto">Авторский путь Андрея PAYSAGE, упакованный в алгоритм успеха. Такой формулой не делится ни одна школа!</p>
             </div>
-
             <div class="max-w-4xl mx-auto space-y-4 fade-in-up">
-               
-                <!-- MODULE 1 -->
                 <div class="glass-card p-1 module-card">
                     <div class="accordion-item bg-transparent">
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
@@ -285,7 +232,6 @@
                     </div>
                 </div>
 
-                <!-- MODULE 2 -->
                 <div class="glass-card p-1 module-card">
                     <div class="accordion-item bg-transparent">
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
@@ -319,7 +265,6 @@
                     </div>
                 </div>
 
-                <!-- MODULE 3 -->
                 <div class="glass-card p-1 module-card">
                     <div class="accordion-item bg-transparent">
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
@@ -353,7 +298,6 @@
                     </div>
                 </div>
 
-                <!-- MODULE 4 (Renamed from 5) -->
                 <div class="glass-card p-1 module-card">
                     <div class="accordion-item bg-transparent">
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
@@ -387,7 +331,6 @@
                     </div>
                 </div>
 
-                <!-- MODULE 5 (Renamed from 6) -->
                 <div class="glass-card p-1 module-card">
                     <div class="accordion-item bg-transparent">
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
@@ -421,7 +364,6 @@
                     </div>
                 </div>
 
-                <!-- MODULE 6 (Renamed from 7) -->
                 <div class="glass-card p-1 module-card">
                     <div class="accordion-item bg-transparent">
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
@@ -455,7 +397,6 @@
                     </div>
                 </div>
 
-                <!-- MODULE 7 (Renamed from 8) -->
                 <div class="glass-card p-1 module-card">
                     <div class="accordion-item bg-transparent">
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
@@ -489,7 +430,6 @@
                     </div>
                 </div>
 
-                <!-- MODULE 8 (Renamed from 9) -->
                 <div class="glass-card p-1 module-card">
                     <div class="accordion-item bg-transparent">
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
@@ -523,7 +463,6 @@
                     </div>
                 </div>
 
-                <!-- MODULE 9 (Renamed from 10) -->
                 <div class="glass-card p-1 module-card">
                     <div class="accordion-item bg-transparent">
                         <div class="accordion-header p-5 sm:p-6 flex justify-between items-center cursor-pointer hover:bg-white/5 transition rounded-xl">
@@ -556,20 +495,15 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </main>
 
-        <!-- PRICING / FORMATS -->
-        <section class="mt-24 fade-in-up">
+        <section id="pricing" class="mt-24 fade-in-up">
             <h2 class="section-title text-center text-4xl sm:text-5xl md:text-6xl text-lime-300 mb-12 text-glow">ФОРМАТЫ УЧАСТИЯ</h2>
-            <!-- Изменил: grid-cols-1 md:grid-cols-3 (было 2), увеличил max-w до 7xl -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
-       
-        <!-- BAZA -->
         <div class="glass-card p-8 flex flex-col hover:border-lime-300/50 transition duration-500">
             <h3 class="section-title text-2xl mb-2 text-gray-300">DJust PRODUCTION: BAZA</h3>
-            <div class="text-4xl font-bold text-white mb-6 font-mono">65 000 ₽</div>
+             
             <ul class="space-y-4 mb-8 flex-grow main-text text-gray-300 text-sm">
                 <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Онлайн уроки с Андреем</li>
                 <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Возможность попасть на лейбл, если трек пройдёт конкурс</li>
@@ -577,98 +511,72 @@
                 <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Проверка домашних заданий</li>
                 <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Доступ 1,5 месяца</li>
             </ul>
-            <a href="https://t.me/Agata_DJ4FUN" class="btn btn-primary text-center py-4 rounded-lg font-bold mt-auto block hover:scale-105">
-                🔥 ВЫБРАТЬ BAZA 🔥
-            </a>
+            <a href="https://www.instagram.com/im_paysage/" class="btn btn-primary text-center py-4 rounded-lg font-bold mt-auto block hover:scale-105">🔥 УЗНАТЬ ЦЕНУ 🔥<br><span style="font-size: 0.75rem; font-weight: normal; margin-top: 4px; display: block;">Выбрать тариф и узнать цену — пиши в директ</span></a>
         </div>
 
-        <!-- SUPREME (RECOMMENDED) -->
         <div class="glass-card p-8 flex flex-col relative border-lime-300/30 shadow-[0_0_30px_rgba(220,255,27,0.1)] hover:shadow-[0_0_40px_rgba(220,255,27,0.2)]">
             <div class="absolute top-0 right-0 bg-lime-300 text-black text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg z-10">TOP</div>
             <h3 class="section-title text-2xl mb-2 text-lime-300">DJust PRODUCTION: SUPREME</h3>
-            <div class="text-4xl font-bold text-white mb-6 font-mono">95 000 ₽</div> 
+             
             <ul class="space-y-4 mb-8 flex-grow main-text text-gray-300 text-sm">
                 <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Все опции тарифа BAZA</li>
                 <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Возможность попасть на лейбл, если трек пройдёт конкурс</li>
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>8 Мастермайндов с Андреем, где разбираем выполненные домашки, как доработать и разбавить ваш трек</li>
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Доступ 3 месяца</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Доступ ко всем урокам в записи</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Проверка домашних заданий</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Индивидуальный созвон 30 минут с Андреем в начале</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Совместное написание трека на курсе</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Доступ 2 месяца</li>
             </ul>
-            <a href="https://t.me/Agata_DJ4FUN" class="btn btn-primary text-center py-4 rounded-lg font-bold mt-auto block hover:scale-105 bg-gradient-to-r from-lime-400 to-emerald-400">
-                💎 ВЫБРАТЬ SUPREME 💎
-            </a>
+            <a href="https://www.instagram.com/im_paysage/" class="btn btn-primary text-center py-4 rounded-lg font-bold mt-auto block hover:scale-105 bg-gradient-to-r from-lime-400 to-emerald-400">💎 УЗНАТЬ ЦЕНУ 💎<br><span style="font-size: 0.75rem; font-weight: normal; margin-top: 4px; display: block;">Выбрать тариф и узнать цену — пиши в директ</span></a>
         </div>
 
-        <!-- ALL IN -->
         <div class="glass-card p-8 flex flex-col hover:border-lime-300/50 transition duration-500">
             <h3 class="section-title text-2xl mb-2 text-gray-300">DJust PRODUCTION: ALL IN</h3>
-             <div class="text-4xl font-bold text-white mb-6 font-mono">185 000 ₽</div> 
-            <ul class="space-y-3 mb-8 flex-grow main-text text-gray-300 text-sm">
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Все опции тарифа SUPREME</li>
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Выход трека на лейбле без конкурса среди учеников</li>
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Личная сессия на 1,5 часа с Андреем по вашему треку</li>
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Общий Zoom с Андреем: разбирает написание своего хита</li>
-                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>2 мастермайнда с Агатой по самопродвижению</li>
-                 <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Доступ 6 месяцев</li>
+             
+            <ul class="space-y-4 mb-8 flex-grow main-text text-gray-300 text-sm">
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Все опции SUPREME</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>100% издание вашего трека на лейбле после курса</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Два индивидуальных созвона по 60 минут</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>Пожизненный доступ к материалам</li>
+                <li class="flex items-start"><span class="text-lime-300 mr-3 mt-0.5">✓</span>VIP поддержка в Telegram</li>
             </ul>
-            <a href="https://t.me/Agata_DJ4FUN" class="btn btn-primary text-center py-4 rounded-lg font-bold mt-auto block hover:scale-105">
-                🚀 ВЫБРАТЬ ALL IN 🚀
-            </a>
+            <a href="https://www.instagram.com/im_paysage/" class="btn btn-primary text-center py-4 rounded-lg font-bold mt-auto block hover:scale-105">🚀 УЗНАТЬ ЦЕНУ 🚀<br><span style="font-size: 0.75rem; font-weight: normal; margin-top: 4px; display: block;">Выбрать тариф и узнать цену — пиши в директ</span></a>
         </div>
+            </div>
 
-    </div>
-</section>
-       
-        <!-- FOOTER -->
+            <div class="max-w-4xl mx-auto mt-16 p-8 glass-card border-lime-300/30 text-center fade-in-up">
+                <h3 class="section-title text-2xl md:text-3xl text-white mb-4">СОМНЕВАЕШЬСЯ ИЛИ ХОЧЕШЬ УЗНАТЬ ЦЕНЫ?</h3>
+                <p class="main-text text-gray-300 text-base md:text-lg mb-8 leading-relaxed">
+                    Выбор тарифа — индивидуальный процесс. Напиши мне в Директ: мы обсудим твой уровень и музыкальные цели, я подберу идеальный формат обучения и отвечу на все вопросы.
+                </p>
+                <a href="https://www.instagram.com/im_paysage/" target="_blank" class="btn btn-primary font-bold text-lg py-4 px-10 rounded-lg inline-block text-black bg-lime-400 hover:bg-lime-300 hover:scale-105 transition shadow-[0_0_20px_rgba(220,255,27,0.4)]">
+                    НАПИСАТЬ В ДИРЕКТ
+                </a>
+            </div>
+        </section>
+
         <footer class="mt-24 py-8 border-t border-white/5 text-center text-gray-500 text-sm">
             <p class="font-mono mb-4">© 2026 DJust 4 Fun. Все права защищены.</p>
             <p class="font-mono opacity-70">
                 ИП Захарова-Хлущевская Агата Онореевна<br>
-                ИНН: 772578516741<br>
-                ОГРНИП: 324774600133556
+                ИНН: 7.72578516741e+11<br>
+                ОГРНИП: 3.24774600133556e+14
             </p>
         </footer>
-
     </div>
-
-    <!-- SCRIPTS -->
     <script>
-        // Init GSAP
         gsap.registerPlugin(ScrollTrigger);
-
-        // Fade Up Animation for sections
         gsap.utils.toArray('.fade-in-up').forEach(element => {
-            gsap.to(element, {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: element,
-                    start: 'top 85%',
-                    toggleActions: 'play none none reverse'
-                }
-            });
+            gsap.to(element, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: element, start: 'top 85%', toggleActions: 'play none none reverse' } });
         });
-
-        // Accordion Logic
         document.querySelectorAll('.accordion-header').forEach(button => {
             button.addEventListener('click', () => {
-                const item = button.parentElement; // Corrected: Target .accordion-item directly
+                const item = button.parentElement; 
                 const isActive = item.classList.contains('active');
-               
-                // Close all others
                 document.querySelectorAll('.accordion-item').forEach(otherItem => {
-                    if (otherItem !== item) {
-                        otherItem.classList.remove('active');
-                    }
+                    if (otherItem !== item) { otherItem.classList.remove('active'); }
                 });
-
-                // Toggle current
-                if (!isActive) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
+                if (!isActive) { item.classList.add('active'); } else { item.classList.remove('active'); }
             });
         });
     </script>
